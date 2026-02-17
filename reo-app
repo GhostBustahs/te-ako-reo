@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="mi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ako Reo — Wīki 3</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0d0b09;
+  --bg2:     #181410;
+  --bg3:     #221e18;
+  --border:  rgba(210,160,60,0.13);
+  --gold:    #c9943a;
+  --goldlt:  #e8b85a;
+  --jade:    #45c47a;
+  --jadedk:  rgba(69,196,122,0.14);
+  --red:     #c0392b;
+  --reddk:   rgba(192,57,43,0.15);
+  --text:    #ede4d4;
+  --muted:   rgba(237,228,212,0.42);
+  --r:       16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:0 0 80px;
+}
+/* diagonal texture */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    repeating-linear-gradient(60deg,rgba(201,148,58,.025) 0,rgba(201,148,58,.025) 1px,transparent 1px,transparent 32px),
+    repeating-linear-gradient(-60deg,rgba(201,148,58,.025) 0,rgba(201,148,58,.025) 1px,transparent 1px,transparent 32px);
+}
+.wrap{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:24px 18px 0;}
+
+/* ── HEADER ── */
+.hdr{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:22px;flex-wrap:wrap;gap:12px;
+}
+.brand{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;color:var(--gold);line-height:1;
+}
+.brand small{
+  display:block;font-family:'DM Sans',sans-serif;font-weight:400;
+  font-size:12px;color:var(--muted);letter-spacing:.5px;margin-top:4px;
+}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip-stat{
+  font-size:13px;padding:5px 12px;border-radius:20px;
+  background:var(--bg3);border:1px solid var(--border);
+}
+.chip-stat b{color:var(--goldlt);}
+
+/* ── PROGRESS ── */
+.pbar{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:22px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--jade));transition:width .4s ease;}
+
+/* ── TABS (mode) ── */
+.tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:5px;margin-bottom:16px;
+}
+.tab{
+  background:none;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  color:var(--muted);padding:9px 6px;border-radius:10px;
+  transition:all .18s;text-align:center;line-height:1.3;
+}
+.tab .mi{display:block;font-size:15px;font-weight:600;color:var(--text);opacity:.45;margin-bottom:1px;}
+.tab .en{display:block;font-size:10px;}
+.tab.on{background:rgba(201,148,58,.18);border:1px solid rgba(201,148,58,.3);color:var(--goldlt);}
+.tab.on .mi{color:var(--goldlt);opacity:1;}
+.tab.on .en{color:rgba(232,184,90,.55);}
+
+/* ── TOPIC PILLS ── */
+.topics{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.tpill{
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--muted);font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:500;padding:6px 14px;
+  border-radius:20px;cursor:pointer;transition:all .18s;
+}
+.tpill.on{
+  background:rgba(69,196,122,.13);
+  border-color:rgba(69,196,122,.35);
+  color:var(--jade);
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;padding:26px 24px;margin-bottom:0;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold) 0%,rgba(201,148,58,.15) 100%);
+}
+.clabel{
+  font-size:10px;font-weight:600;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:18px;
+}
+
+/* ── QUESTION BLOCK ── */
+.qblock{
+  min-height:76px;padding:18px 20px;
+  background:rgba(0,0,0,.28);border-radius:12px;
+  border-left:4px solid var(--gold);
+  margin-bottom:18px;
+  font-family:'DM Serif Display',serif;font-size:22px;
+  line-height:1.4;display:flex;align-items:center;
+}
+.qsub{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;}
+
+/* ── ANSWER REVEAL ── */
+.ablock{
+  display:none;margin-top:0;padding:18px 20px;
+  background:rgba(69,196,122,.08);border-radius:12px;
+  border-left:4px solid var(--jade);
+  animation:up .25s ease;
+}
+.ablock.show{display:block;}
+.areo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--jade);line-height:1.4;}
+.anote{
+  margin-top:10px;font-size:13px;color:rgba(69,196,122,.75);
+  line-height:1.6;background:rgba(0,0,0,.2);
+  padding:10px 14px;border-radius:8px;border-left:3px solid rgba(69,196,122,.3);
+}
+
+/* ── FILL BLANK ── */
+.bsentence{font-family:'DM Serif Display',serif;font-size:22px;line-height:1.6;}
+.binput{
+  display:inline-block;background:none;border:none;
+  border-bottom:2px solid var(--gold);
+  color:var(--goldlt);font-family:'DM Serif Display',serif;
+  font-size:22px;width:120px;outline:none;text-align:center;
+  padding:0 4px;transition:border-color .2s,color .2s;vertical-align:baseline;
+}
+.binput:focus{border-bottom-color:var(--jade);color:var(--jade);}
+.binput.ok{border-bottom-color:var(--jade);color:var(--jade);}
+.binput.ng{border-bottom-color:var(--red);color:#e07060;}
+.ben{font-size:13px;color:var(--muted);margin-top:10px;font-style:italic;}
+.bfb{
+  display:none;margin-top:14px;padding:12px 16px;
+  border-radius:10px;font-size:14px;animation:up .2s ease;
+}
+.bfb.show{display:block;}
+.bfb.ok{background:rgba(69,196,122,.12);color:var(--jade);border:1px solid rgba(69,196,122,.28);}
+.bfb.ng{background:var(--reddk);color:#e07060;border:1px solid rgba(192,57,43,.3);}
+
+/* ── SENTENCE BUILDER ── */
+.sbeng{font-family:'DM Serif Display',serif;font-size:22px;line-height:1.4;margin-bottom:14px;}
+.sbhint{font-size:12px;color:var(--muted);margin-bottom:12px;}
+.sbhint b{color:var(--goldlt);}
+.sbzone{
+  min-height:54px;padding:12px;
+  background:rgba(0,0,0,.28);border-radius:12px;
+  border:1px dashed rgba(201,148,58,.28);
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:10px;cursor:pointer;transition:border-color .2s;
+}
+.sbzone.target{border-color:rgba(201,148,58,.55);}
+.sbopt{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.wchip{
+  background:var(--bg3);border:1px solid rgba(201,148,58,.22);
+  color:var(--text);font-family:'DM Serif Display',serif;font-size:17px;
+  padding:7px 14px;border-radius:9px;cursor:pointer;
+  transition:all .15s;user-select:none;
+}
+.wchip:hover{background:rgba(201,148,58,.18);border-color:rgba(201,148,58,.5);color:var(--goldlt);}
+.wchip.placed{background:rgba(69,196,122,.12);border-color:rgba(69,196,122,.38);color:var(--jade);}
+.wchip.ng{background:var(--reddk);border-color:rgba(192,57,43,.4);color:#e07060;}
+
+/* ── TENSE REF STRIP ── */
+.tensestrip{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:6px;
+  margin-bottom:20px;
+}
+.tensecell{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;font-size:12px;
+}
+.tensecell .tm{font-weight:700;color:var(--goldlt);font-size:13px;margin-bottom:2px;}
+.tensecell .te{color:var(--muted);}
+.tensecell .tx{font-family:'DM Serif Display',serif;font-size:14px;color:var(--text);margin-top:4px;}
+
+/* ── BUTTONS ── */
+.btns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+.btn{
+  border:none;font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:15px;padding:12px 20px;border-radius:12px;
+  cursor:pointer;transition:all .18s;flex:1;min-width:110px;
+}
+.btn-p{background:var(--gold);color:#140f07;}
+.btn-p:hover{background:var(--goldlt);transform:translateY(-1px);}
+.btn-s{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.btn-s:hover{color:var(--text);border-color:rgba(201,148,58,.35);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
+
+/* ── SHORTCUTS ── */
+.sc{text-align:center;margin-top:20px;font-size:12px;color:var(--muted);}
+.k{display:inline-block;padding:1px 7px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;font-family:monospace;font-size:11px;margin:0 2px;}
+
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:540px){
+  .qblock,.bsentence,.sbeng,.areo,.binput{font-size:18px;}
+  .card{padding:20px 16px;}
+  .tensestrip{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="brand">Ako Reo <small>Wīki 3 · Nō ōu akoranga</small></div>
+    <div class="chips">
+      <span class="chip-stat">🔥 <b id="stk">0</b></span>
+      <span class="chip-stat"><b id="dn">0</b> ngā whakautu</span>
+    </div>
+  </div>
+
+  <div class="pbar"><div class="pfill" id="pf" style="width:0%"></div></div>
+
+  <!-- TENSE REFERENCE STRIP (always visible) -->
+  <div class="tensestrip" id="tenseRef">
+    <div class="tensecell"><div class="tm">Kei te ___</div><div class="te">present — happening now</div><div class="tx">Kei te oma ahau</div></div>
+    <div class="tensecell"><div class="tm">E ___ ana</div><div class="te">present continuous</div><div class="tx">E oma ana koe</div></div>
+    <div class="tensecell"><div class="tm">Ka ___</div><div class="te">future / sequential</div><div class="tx">Ka oma ia</div></div>
+    <div class="tensecell"><div class="tm">I ___</div><div class="te">simple past</div><div class="tx">I oma ahau</div></div>
+    <div class="tensecell"><div class="tm">Kua ___</div><div class="te">past → present effect</div><div class="tx">Kua oma ahau</div></div>
+    <div class="tensecell"><div class="tm">I te ___</div><div class="te">past continuous</div><div class="tx">I te oma ahau</div></div>
+  </div>
+
+  <!-- MODE TABS -->
+  <div class="tabs">
+    <button class="tab on" id="btn-flash" onclick="setMode('flash')">
+      <span class="mi">Kāri</span><span class="en">Flashcard</span>
+    </button>
+    <button class="tab" id="btn-blank" onclick="setMode('blank')">
+      <span class="mi">Whakakī</span><span class="en">Fill blank</span>
+    </button>
+    <button class="tab" id="btn-build" onclick="setMode('build')">
+      <span class="mi">Hangaia</span><span class="en">Build</span>
+    </button>
+  </div>
+
+  <!-- TOPIC PILLS -->
+  <div class="topics">
+    <button class="tpill on" id="t-ao"    onclick="setTopic('ao')">A/O · Pūriro</button>
+    <button class="tpill"    id="t-kupu"  onclick="setTopic('kupu')">Tūpou · Pronouns</button>
+    <button class="tpill"    id="t-tense" onclick="setTopic('tense')">Rerenga · Tenses</button>
+    <button class="tpill"    id="t-wahanga" onclick="setTopic('wahanga')">Ngā Wāhanga</button>
+  </div>
+
+  <!-- ═══ FLASHCARD PANEL ═══ -->
+  <div id="panel-flash" class="card">
+    <div class="clabel" id="fclbl">Kāri · A/O Pūriro</div>
+    <div class="qblock">
+      <div><span id="fcq">—</span><div class="qsub" id="fcsub"></div></div>
+    </div>
+    <div class="ablock" id="fca">
+      <div class="areo" id="fcreo"></div>
+      <div class="anote" id="fcnote"></div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-p" id="fcrevbtn" onclick="fcReveal()">Huri · Reveal</button>
+      <button class="btn btn-s" onclick="fcNext()">Panuku →</button>
+    </div>
+  </div>
+
+  <!-- ═══ FILL BLANK PANEL ═══ -->
+  <div id="panel-blank" class="card" style="display:none">
+    <div class="clabel" id="bllbl">Whakakī · A/O Pūriro</div>
+    <div class="bsentence" id="blsent"></div>
+    <div class="ben" id="blen"></div>
+    <div class="bfb" id="blfb"></div>
+    <div class="btns">
+      <button class="btn btn-p" id="blchkbtn" onclick="blCheck()">Tika? · Check</button>
+      <button class="btn btn-s" onclick="blNext()">Panuku →</button>
+    </div>
+  </div>
+
+  <!-- ═══ BUILD PANEL ═══ -->
+  <div id="panel-build" class="card" style="display:none">
+    <div class="clabel" id="sblbl">Hangaia · A/O Pūriro</div>
+    <div class="sbeng" id="sbeng"></div>
+    <div class="sbhint">Tīkina ngā kupu — <b>tap words in order</b> · tap placed word to remove</div>
+    <div class="sbzone" id="sbplaced"></div>
+    <div class="sbopt"  id="sbopts"></div>
+    <div class="bfb" id="sbfb"></div>
+    <div class="btns">
+      <button class="btn btn-p" onclick="sbCheck()">Tika? · Check</button>
+      <button class="btn btn-s" onclick="sbNext()">Panuku →</button>
+    </div>
+  </div>
+
+  <div class="sc">
+    <span class="k">Space</span> huri/tika &nbsp;·&nbsp;
+    <span class="k">→</span> panuku &nbsp;·&nbsp;
+    <span class="k">1</span><span class="k">2</span><span class="k">3</span> kaupeka
+  </div>
+</div><!-- /wrap -->
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA — built directly from the uploaded slide decks
+// ═══════════════════════════════════════════════════════════
+
+// ── A/O POSSESSIVES (from AO.pdf examples) ──
+const dataAO = [
+  // straight from slide examples
+  {
+    q:"I haere ia ki te tiki i _____ kau",
+    sub:"He went/she went to get ___ cow — A or O?",
+    reo:"tāna kau",
+    note:"Kau (cow) = something controlled/owned through action → A-category: tāna (his/her, singular A)",
+    blank:"I haere ia ki te tiki i _____ kau.",
+    bans:"tāna", ben:"He went to get his cow.",
+    build:{en:"He went to get his cow",w:["I","haere","ia","ki","te","tiki","i","tāna","kau"],a:["I","haere","ia","ki","te","tiki","i","tāna","kau"]}
+  },
+  {
+    q:"I whāngai te māmā i _____ kuia",
+    sub:"The mother fed ___ grandmother — A or O?",
+    reo:"tōna kuia",
+    note:"Kuia (grandmother) = whānau relationship → O-category: tōna (his/her, singular O)",
+    blank:"I whāngai te māmā i _____ kuia.",
+    bans:"tōna", ben:"The mother fed her grandmother.",
+    build:{en:"The mother fed her grandmother",w:["I","whāngai","te","māmā","i","tōna","kuia"],a:["I","whāngai","te","māmā","i","tōna","kuia"]}
+  },
+  {
+    q:"Kei hea ā _____ tamariki?",
+    sub:"Where are ___ (our dual, A-cat) children?",
+    reo:"ā tāua tamariki",
+    note:"Tamariki (children) = A-category in this context (dependants you are responsible for). Tāua = us two (you and me).",
+    blank:"Kei hea ā _____ tamariki?",
+    bans:"tāua", ben:"Where are our (two) children?",
+    build:{en:"Where are our children?",w:["Kei","hea","ā","tāua","tamariki","?"],a:["Kei","hea","ā","tāua","tamariki","?"]}
+  },
+  {
+    q:"Ko te reo Māori _____ reo rangatira.",
+    sub:"Māori is ___ (our dual, O-cat) chiefly language",
+    reo:"tō tāua nei reo rangatira",
+    note:"Reo (language) = O-category (intrinsic identity). Tāua = us two (you and me inclusive). 'nei' adds emphasis/proximity.",
+    blank:"Ko te reo Māori _____ reo rangatira.",
+    bans:"tō tāua nei", ben:"Te reo Māori is our chiefly language.",
+    build:{en:"Te reo Māori is our chiefly language",w:["Ko","te","reo","Māori","tō","tāua","nei","reo","rangatira"],a:["Ko","te","reo","Māori","tō","tāua","nei","reo","rangatira"]}
+  },
+  // from O-category wāhanga sections
+  {
+    q:"He nui _____ whare / Ka haere au ki _____ whare",
+    sub:"My (big) house / I'm going to your house — fill both",
+    reo:"tōku whare · tōu whare",
+    note:"Whare = O-category (you live IN it). Tōku = my, tōu = your (singular O).",
+    blank:"Ka haere au ki _____ whare.",
+    bans:"tōu", ben:"I am going to your house.",
+    build:{en:"I am going to your house",w:["Ka","haere","au","ki","tōu","whare"],a:["Ka","haere","au","ki","tōu","whare"]}
+  },
+  {
+    q:"Kei hea _____ waka? / Kua pakaru _____ waka.",
+    sub:"Your waka? / My waka broke — which possessives?",
+    reo:"tōu waka · tōku waka",
+    note:"Waka = O-category (vehicle you travel in/belong to, not drive like a car in modern use). Tōu = your, tōku = my.",
+    blank:"Kua pakaru _____ waka.",
+    bans:"tōku", ben:"My waka broke.",
+    build:{en:"My waka is broken",w:["Kua","pakaru","tōku","waka"],a:["Kua","pakaru","tōku","waka"]}
+  },
+  {
+    q:"Me kai ahau i _____ pire",
+    sub:"I must eat ___ pills — A or O? (ōku / āku)",
+    reo:"ōku pire",
+    note:"Pire (pills/medicine) = O-category (something that acts on your body, whakaora category). Plural ō: ōku.",
+    blank:"Me kai ahau i _____ pire.",
+    bans:"ōku", ben:"I must take my pills.",
+    build:{en:"I must take my pills",w:["Me","kai","ahau","i","ōku","pire"],a:["Me","kai","ahau","i","ōku","pire"]}
+  },
+  {
+    q:"I ngaro i a ia _____ rongoā.",
+    sub:"He/she lost ___ medicine — A or O?",
+    reo:"tōna rongoā",
+    note:"Rongoā (medicine) = O-category (something that heals/surrounds you). Tōna = his/her singular O.",
+    blank:"I ngaro i a ia _____ rongoā.",
+    bans:"tōna", ben:"He/she lost his/her medicine.",
+    build:{en:"She lost her medicine",w:["I","ngaro","i","a","ia","tōna","rongoā"],a:["I","ngaro","i","a","ia","tōna","rongoā"]}
+  },
+  // whakarākei / whakaora / whanaungatanga
+  {
+    q:"i mau ia i _____ pounamu",
+    sub:"He/she wore ___ pounamu — A or O?",
+    reo:"tōna pounamu",
+    note:"Pounamu = O-category (taonga worn on body, whakarākei / belonging to identity). Tōna = his/her.",
+    blank:"i mau ia i _____ pounamu.",
+    bans:"tōna", ben:"He/she wore his/her pounamu.",
+    build:{en:"She wore her pounamu",w:["i","mau","ia","i","tōna","pounamu"],a:["i","mau","ia","i","tōna","pounamu"]}
+  },
+  {
+    q:"He ātaahua rirerire _____ whakakai.",
+    sub:"Her earrings are truly beautiful — A or O? (plural)",
+    reo:"ōna whakakai",
+    note:"Whakakai (earrings) = O-category (ornaments worn on body). Plural ō: ōna (his/her plural O).",
+    blank:"He ātaahua rirerire _____ whakakai.",
+    bans:"ōna", ben:"Her earrings are truly beautiful.",
+    build:{en:"Her earrings are truly beautiful",w:["He","ātaahua","rirerire","ōna","whakakai"],a:["He","ātaahua","rirerire","ōna","whakakai"]}
+  },
+  {
+    q:"He wahine kaha _____ māmā / He rerehua _____ hoa rangatira.",
+    sub:"My mother is strong / My partner is beautiful — which possessives?",
+    reo:"tōku māmā · tōku hoa rangatira",
+    note:"Both māmā (mother) and hoa rangatira (partner) are whanaungatanga → O-category. Tōku = my.",
+    blank:"He wahine kaha _____ māmā.",
+    bans:"tōku", ben:"My mother is a strong woman.",
+    build:{en:"My mother is a strong woman",w:["He","wahine","kaha","tōku","māmā"],a:["He","wahine","kaha","tōku","māmā"]}
+  },
+  // hangarau / tautetanga A-category
+  {
+    q:"Tīkina _____ waea pūkoro.",
+    sub:"Fetch ___ (your) mobile phone — A or O?",
+    reo:"tāu waea pūkoro",
+    note:"Waea pūkoro (phone) = A-category (you control/use hangarau). Tāu = your (singular A).",
+    blank:"Tīkina _____ waea pūkoro.",
+    bans:"tāu", ben:"Fetch your mobile phone.",
+    build:{en:"Fetch your mobile phone",w:["Tīkina","tāu","waea","pūkoro"],a:["Tīkina","tāu","waea","pūkoro"]}
+  },
+  {
+    q:"Whakahokia _____ rorohiko.",
+    sub:"Return ___ (your) laptop — A or O?",
+    reo:"tāu rorohiko",
+    note:"Rorohiko (computer) = A-category (hangarau you use/control). Tāu = your (singular A).",
+    blank:"Whakahokia _____ rorohiko.",
+    bans:"tāu", ben:"Return your laptop.",
+    build:{en:"Return your laptop",w:["Whakahokia","tāu","rorohiko"],a:["Whakahokia","tāu","rorohiko"]}
+  },
+  {
+    q:"Ko Hone _____ tama / He iti _____ kurī",
+    sub:"Hone is ___ son / My dog is small — A or O?",
+    reo:"tāna tama · tāku kurī",
+    note:"Tama (son/child you are responsible for) = A-category. Kurī (dog you own/care for) = A-category. Tāna = his/her A, tāku = my A.",
+    blank:"He iti _____ kurī.",
+    bans:"tāku", ben:"My dog is small.",
+    build:{en:"My dog is small",w:["He","iti","tāku","kurī"],a:["He","iti","tāku","kurī"]}
+  },
+  {
+    q:"Me ko MJ _____ pekepeke / I hoki ia ki _____ mahi.",
+    sub:"MJ is her jumping / She returned to her work — A or O?",
+    reo:"āna pekepeke · tāna mahi",
+    note:"Pekepeke (jump rope, activity) = A-category. Mahi (work/job) = A-category (things you do). Āna = her plural A, tāna = her singular A.",
+    blank:"I hoki ia ki _____ mahi.",
+    bans:"tāna", ben:"She returned to her work.",
+    build:{en:"She returned to her work",w:["I","hoki","ia","ki","tāna","mahi"],a:["I","hoki","ia","ki","tāna","mahi"]}
+  },
+  // body parts / wāhanga
+  {
+    q:"Anei _____ waewae / He mamae _____ tuke.",
+    sub:"Here are my legs / My shoulder is sore — A or O?",
+    reo:"ōku waewae · tōku tuke",
+    note:"Body parts = O-category (wāhanga — parts of you). Ōku = my (plural O), tōku = my (singular O).",
+    blank:"He mamae _____ tuke.",
+    bans:"tōku", ben:"My shoulder is sore.",
+    build:{en:"My shoulder is sore",w:["He","mamae","tōku","tuke"],a:["He","mamae","tōku","tuke"]}
+  },
+  // whenua / wāhi
+  {
+    q:"He āhuru mōwai _____ tūrangawaewae.",
+    sub:"My tūrangawaewae is a safe haven — A or O?",
+    reo:"tōku tūrangawaewae",
+    note:"Tūrangawaewae (place to stand, homeland) = O-category. You BELONG to it, it doesn't belong to you. Tōku = my O.",
+    blank:"He āhuru mōwai _____ tūrangawaewae.",
+    bans:"tōku", ben:"My tūrangawaewae is a safe haven.",
+    build:{en:"My tūrangawaewae is a safe haven",w:["He","āhuru","mōwai","tōku","tūrangawaewae"],a:["He","āhuru","mōwai","tōku","tūrangawaewae"]}
+  }
+];
+
+// ── PRONOUNS (from both PDFs, exact slide diagrams) ──
+const dataKupu = [
+  {
+    q:"Ko wai tēnei? — I (the speaker)",
+    sub:"1st person singular",
+    reo:"ahau (or au in flowing speech)",
+    note:"Ahau = I/me. In sentences after verbs 'au' is used: Kei te haere au. As subject of Ko: Ko ahau tēnei.",
+    blank:"Kei te haere _____ ki te kura.",
+    bans:"au", ben:"I am going to school.",
+    build:{en:"I am going to school",w:["Kei","te","haere","au","ki","te","kura"],a:["Kei","te","haere","au","ki","te","kura"]}
+  },
+  {
+    q:"Ko wai tēnei? — You (1 person, the listener)",
+    sub:"2nd person singular",
+    reo:"koe",
+    note:"Koe = you (singular). E oma ana koe = you are running. Don't confuse with kōrua (you two) or koutou (you 3+).",
+    blank:"E oma ana _____ i tēnei rā.",
+    bans:"koe", ben:"You are running today.",
+    build:{en:"You are running today",w:["E","oma","ana","koe","i","tēnei","rā"],a:["E","oma","ana","koe","i","tēnei","rā"]}
+  },
+  {
+    q:"Ko wai? — He / she / it",
+    sub:"3rd person singular",
+    reo:"ia",
+    note:"Ia = he, she, it. Te reo Māori has NO gender distinction in pronouns. Ka oma ia = he/she will run.",
+    blank:"Ka oma _____ āpōpō.",
+    bans:"ia", ben:"He/she will run tomorrow.",
+    build:{en:"She will run tomorrow",w:["Ka","oma","ia","āpōpō"],a:["Ka","oma","ia","āpōpō"]}
+  },
+  {
+    q:"Ko wai? — You and me (2, speaker includes listener)",
+    sub:"1st person dual inclusive",
+    reo:"tāua",
+    note:"Tāua = us two (YOU and ME). The speaker IS included, the key is both people are in the box. Contrast: māua excludes the listener.",
+    blank:"Ka haere _____ ki te toa āpōpō.",
+    bans:"tāua", ben:"You and I will go to the shop tomorrow.",
+    build:{en:"You and I will go to the shop",w:["Ka","haere","tāua","ki","te","toa"],a:["Ka","haere","tāua","ki","te","toa"]}
+  },
+  {
+    q:"Ko wai? — Me and one other (NOT you)",
+    sub:"1st person dual exclusive",
+    reo:"māua",
+    note:"Māua = us two (me + one other, NOT the listener). The speaker is in the box but the listener is OUTSIDE. Kei hea ā tāua tamariki vs māua.",
+    blank:"Ka noho _____ i konei.",
+    bans:"māua", ben:"The two of us (not you) will stay here.",
+    build:{en:"The two of us will stay here",w:["Ka","noho","māua","i","konei"],a:["Ka","noho","māua","i","konei"]}
+  },
+  {
+    q:"Ko wai? — You two (speaker NOT included)",
+    sub:"2nd person dual",
+    reo:"kōrua",
+    note:"Kōrua = you two. The speaker is OUTSIDE, both listeners are IN the box. He ātaahua kōrua = you two are beautiful.",
+    blank:"He pai _____ kōrua.",
+    bans:"kōrua", ben:"You two are good.",
+    build:{en:"You two are wonderful",w:["He","pai","kōrua"],a:["He","pai","kōrua"]}
+  },
+  {
+    q:"Ko wai? — Those two (neither speaker nor listener)",
+    sub:"3rd person dual",
+    reo:"rāua",
+    note:"Rāua = those two (third parties). Both people are in the box but neither is the speaker or listener.",
+    blank:"Ka haere _____ ki te whare.",
+    bans:"rāua", ben:"Those two will go home.",
+    build:{en:"Those two will go home",w:["Ka","haere","rāua","ki","te","whare"],a:["Ka","haere","rāua","ki","te","whare"]}
+  },
+  {
+    q:"Ko wai? — All of us including you (3+)",
+    sub:"1st person plural inclusive",
+    reo:"tātou",
+    note:"Tātou = we all (including the listener, 3+). Speaker + listener + others all inside the box. Ka kai tātou = we will all eat.",
+    blank:"Ka kai _____ āpōpō.",
+    bans:"tātou", ben:"We will all eat tomorrow.",
+    build:{en:"We will all eat tomorrow",w:["Ka","kai","tātou","āpōpō"],a:["Ka","kai","tātou","āpōpō"]}
+  },
+  {
+    q:"Ko wai? — We (3+) but NOT you",
+    sub:"1st person plural exclusive",
+    reo:"mātou",
+    note:"Mātou = we (3+, excluding the listener). The listener is OUTSIDE the box. Contrast with tātou which includes listener.",
+    blank:"Ka hoe _____ āpōpō.",
+    bans:"mātou", ben:"We (not you) will paddle tomorrow.",
+    build:{en:"We will paddle tomorrow",w:["Ka","hoe","mātou","āpōpō"],a:["Ka","hoe","mātou","āpōpō"]}
+  },
+  {
+    q:"Ko wai? — You all (3+, speaker NOT included)",
+    sub:"2nd person plural",
+    reo:"koutou",
+    note:"Koutou = you (3+). All listeners are in the box, speaker is outside. He pai koutou katoa = you are all good.",
+    blank:"He pai _____ katoa.",
+    bans:"koutou", ben:"You are all wonderful.",
+    build:{en:"You are all wonderful",w:["He","pai","koutou","katoa"],a:["He","pai","koutou","katoa"]}
+  },
+  {
+    q:"Ko wai? — They (3 or more)",
+    sub:"3rd person plural",
+    reo:"rātou",
+    note:"Rātou = they (3+). Nobody in the box is the speaker or listener. Ka haere rātou = they will go.",
+    blank:"Ka haere _____ ki te whare.",
+    bans:"rātou", ben:"They will go home.",
+    build:{en:"They will go home",w:["Ka","haere","rātou","ki","te","whare"],a:["Ka","haere","rātou","ki","te","whare"]}
+  }
+];
+
+// ── TENSES (from Active Sentence slide deck) ──
+const dataTense = [
+  {
+    q:"Kei te oma ahau",
+    sub:"Which tense marker? What does it signal?",
+    reo:"Kei te ___ — present tense",
+    note:"Kei te = something happening RIGHT NOW. Like 'am/is/are ___ing'. Kei te oma ahau = I am running.",
+    blank:"_____ oma ahau.",
+    bans:"Kei te", ben:"I am running (right now).",
+    build:{en:"I am running",w:["Kei","te","oma","ahau"],a:["Kei","te","oma","ahau"]}
+  },
+  {
+    q:"E oma ana koe",
+    sub:"Which tense marker? What does it signal?",
+    reo:"E ___ ana — present continuous",
+    note:"E...ana wraps around the verb. Like 'kei te' but slightly more emphatic/formal continuous. E oma ana koe = you are running.",
+    blank:"E oma _____ koe.",
+    bans:"ana", ben:"You are running.",
+    build:{en:"You are running",w:["E","oma","ana","koe"],a:["E","oma","ana","koe"]}
+  },
+  {
+    q:"Ka oma ia",
+    sub:"Which tense marker? What does it signal?",
+    reo:"Ka ___ — future / sequential / narrative",
+    note:"Ka = future action, OR next action in a sequence, OR used in storytelling/narrative. Ka oma ia = she will run / she ran (narrative).",
+    blank:"_____ oma ia.",
+    bans:"Ka", ben:"She will run / She ran (narrative).",
+    build:{en:"She will run",w:["Ka","oma","ia"],a:["Ka","oma","ia"]}
+  },
+  {
+    q:"I oma ahau",
+    sub:"Which tense marker? What does it signal?",
+    reo:"I ___ — simple past",
+    note:"I = simple past (it happened and is done). I oma ahau = I ran. Short and clean — contrast with I te oma ahau (was running).",
+    blank:"_____ oma ahau inanahi.",
+    bans:"I", ben:"I ran yesterday.",
+    build:{en:"I ran yesterday",w:["I","oma","ahau","inanahi"],a:["I","oma","ahau","inanahi"]}
+  },
+  {
+    q:"Kua oma ahau",
+    sub:"Which tense marker? What does it signal?",
+    reo:"Kua ___ — past with present relevance",
+    note:"Kua = I have run (the running happened and affects now, like English present perfect). Kua pakaru tōku waka = my waka has broken (and is still broken).",
+    blank:"_____ pakaru tōku waka.",
+    bans:"Kua", ben:"My waka has broken (and is still broken).",
+    build:{en:"My waka has broken",w:["Kua","pakaru","tōku","waka"],a:["Kua","pakaru","tōku","waka"]}
+  },
+  {
+    q:"I te oma ahau",
+    sub:"Which tense marker? What does it signal?",
+    reo:"I te ___ — past continuous",
+    note:"I te = was ___ing (past continuous, action was in progress). Contrast: I oma = ran (done). I te oma = was running (in progress).",
+    blank:"_____ oma ahau i tērā rā.",
+    bans:"I te", ben:"I was running that day.",
+    build:{en:"I was running that day",w:["I","te","oma","ahau","i","tērā","rā"],a:["I","te","oma","ahau","i","tērā","rā"]}
+  },
+  // slide sentences using real tenses
+  {
+    q:"Nā te rā roa, i heke _____ kaha",
+    sub:"Because of the long day, his/her strength fell — which possessive?",
+    reo:"tōna kaha",
+    note:"Kaha (strength/energy) = O-category (intrinsic quality of a person). Tōna = his/her singular O.",
+    blank:"I heke _____ kaha nā te rā roa.",
+    bans:"tōna", ben:"His/her strength fell because of the long day.",
+    build:{en:"His strength fell because of the long day",w:["I","heke","tōna","kaha","nā","te","rā","roa"],a:["I","heke","tōna","kaha","nā","te","rā","roa"]}
+  },
+  {
+    q:"Kei te menemene tonu ia, _____ māia hoki",
+    sub:"She keeps smiling, her resilience too — A or O?",
+    reo:"tōna māia",
+    note:"Māia (courage/resilience) = O-category (intrinsic character quality). Tōna = his/her O.",
+    blank:"Kei te menemene tonu ia, _____ māia hoki.",
+    bans:"tōna", ben:"She keeps smiling, her resilience too.",
+    build:{en:"She keeps smiling her resilience too",w:["Kei","te","menemene","tonu","ia","tōna","māia","hoki"],a:["Kei","te","menemene","tonu","ia","tōna","māia","hoki"]}
+  },
+  {
+    q:"He ātaahua _____ tāera.",
+    sub:"His/her style is beautiful — A or O?",
+    reo:"tōna tāera",
+    note:"Tāera (style/look) = O-category (part of personal identity/appearance). Tōna = his/her O singular.",
+    blank:"He ātaahua _____ tāera.",
+    bans:"tōna", ben:"His/her style is beautiful.",
+    build:{en:"His style is beautiful",w:["He","ātaahua","tōna","tāera"],a:["He","ātaahua","tōna","tāera"]}
+  }
+];
+
+// ── WĀHANGA CATEGORIES (from AO.pdf O-category chart) ──
+const dataWahanga = [
+  {
+    q:"WHAKARURUHAU — What A/O category are shelters?",
+    sub:"Umbrella, house, shelter, cap, kākahu",
+    reo:"O-category",
+    note:"Whakaruruhau (shelter/protection) things surround and protect you → O-category. He nui tōku whare.",
+    blank:"He nui _____ whare.",
+    bans:"tōku", ben:"My house is big.",
+    build:{en:"I am going to your house",w:["Ka","haere","au","ki","tōu","whare"],a:["Ka","haere","au","ki","tōu","whare"]}
+  },
+  {
+    q:"WAKA — What A/O category are traditional vessels?",
+    sub:"Waka hourua, waka taua, waka ama",
+    reo:"O-category",
+    note:"Waka (traditional vessel) = O-category — you travel IN it and belong to it. Kei hea tōu waka?",
+    blank:"Kei hea _____ waka?",
+    bans:"tōu", ben:"Where is your waka?",
+    build:{en:"Where is your waka",w:["Kei","hea","tōu","waka"],a:["Kei","hea","tōu","waka"]}
+  },
+  {
+    q:"WHAKAORA — What A/O category is medicine/health items?",
+    sub:"Rongoā, pire, moenga, tipu",
+    reo:"O-category",
+    note:"Whakaora items act on/protect your body → O-category. Contrast: food (kai) you control = A-category.",
+    blank:"I ngaro i a ia _____ rongoā.",
+    bans:"tōna", ben:"He/she lost his/her medicine.",
+    build:{en:"I must take my pills",w:["Me","kai","ahau","i","ōku","pire"],a:["Me","kai","ahau","i","ōku","pire"]}
+  },
+  {
+    q:"WHAKARĀKEI — What A/O category is adornment?",
+    sub:"Pounamu, whakakai, moko, taonga",
+    reo:"O-category",
+    note:"Whakarākei (adornment/decoration) = O-category — taonga worn on body, part of identity.",
+    blank:"i mau ia i _____ pounamu.",
+    bans:"tōna", ben:"He/she wore his/her pounamu.",
+    build:{en:"Her earrings are truly beautiful",w:["He","ātaahua","rirerire","ōna","whakakai"],a:["He","ātaahua","rirerire","ōna","whakakai"]}
+  },
+  {
+    q:"WĀHANGA — What A/O category are body parts?",
+    sub:"Waewae, tuke, ringaringa, upoko",
+    reo:"O-category",
+    note:"Wāhanga o te tinana (body parts) = O-category — they ARE you. Anei ōku waewae. He mamae tōku tuke.",
+    blank:"He mamae _____ tuke.",
+    bans:"tōku", ben:"My shoulder is sore.",
+    build:{en:"My shoulder is sore",w:["He","mamae","tōku","tuke"],a:["He","mamae","tōku","tuke"]}
+  },
+  {
+    q:"WHANAUNGATANGA — What A/O category are relationships?",
+    sub:"Māmā, hoa rangatira, kuia, tama, tamariki",
+    reo:"Mixed — but mostly O-category",
+    note:"Whānau relationships = O-category (tōku māmā, tōku hoa rangatira). HOWEVER: tama/tamariki (children you are responsible for) can be A-category. Context matters!",
+    blank:"He wahine kaha _____ māmā.",
+    bans:"tōku", ben:"My mother is a strong woman.",
+    build:{en:"My mother is a strong woman",w:["He","wahine","kaha","tōku","māmā"],a:["He","wahine","kaha","tōku","māmā"]}
+  },
+  {
+    q:"HANGARAU / KAI — What A/O category are these?",
+    sub:"Waea pūkoro, rorohiko, kai",
+    reo:"A-category",
+    note:"Things you USE, CONTROL, or CONSUME = A-category. Tāu waea pūkoro, tāu rorohiko, tāu kai. You pick them up, operate them, eat them.",
+    blank:"Tīkina _____ waea pūkoro.",
+    bans:"tāu", ben:"Fetch your mobile phone.",
+    build:{en:"Fetch your mobile phone",w:["Tīkina","tāu","waea","pūkoro"],a:["Tīkina","tāu","waea","pūkoro"]}
+  },
+  {
+    q:"WĀHI — What A/O category are places of belonging?",
+    sub:"Tūrangawaewae, ūkaipō, kāinga",
+    reo:"O-category",
+    note:"Places of origin/belonging = O-category. You belong TO them, they don't belong to you. He iti tōku ūkaipō.",
+    blank:"He āhuru mōwai _____ tūrangawaewae.",
+    bans:"tōku", ben:"My tūrangawaewae is a safe haven.",
+    build:{en:"My tūrangawaewae is a safe haven",w:["He","āhuru","mōwai","tōku","tūrangawaewae"],a:["He","āhuru","mōwai","tōku","tūrangawaewae"]}
+  }
+];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let mode='flash', topic='ao';
+let cur=null, revealed=false;
+let sbPlaced=[], sbOpts=[];
+let stats={streak:0, done:0};
+
+const topicMap={ao:dataAO, kupu:dataKupu, tense:dataTense, wahanga:dataWahanga};
+const topicLabel={ao:'A/O · Pūriro', kupu:'Tūpou · Pronouns', tense:'Rerenga · Tenses', wahanga:'Ngā Wāhanga'};
+
+function rand(a){return a[Math.floor(Math.random()*a.length)];}
+
+// ═══════════════════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════════════════
+function bump(ok){
+  stats.done++;
+  stats.streak = ok ? stats.streak+1 : 0;
+  document.getElementById('dn').textContent=stats.done;
+  document.getElementById('stk').textContent=stats.streak;
+  document.getElementById('pf').style.width=(stats.done%20)*5+'%';
+}
+
+// ═══════════════════════════════════════════════════════════
+// MODE / TOPIC SWITCHING
+// ═══════════════════════════════════════════════════════════
+function setMode(m){
+  mode=m;
+  ['flash','blank','build'].forEach(x=>{
+    document.getElementById('panel-'+x).style.display=x===m?'block':'none';
+    document.getElementById('btn-'+x).classList.toggle('on',x===m);
+  });
+  // tense strip only shown on tense topic + flash
+  document.getElementById('tenseRef').style.display=
+    (topic==='tense' && mode==='flash') ? 'grid' : 'none';
+  load();
+}
+function setTopic(t){
+  topic=t;
+  ['ao','kupu','tense','wahanga'].forEach(x=>{
+    document.getElementById('t-'+x).classList.toggle('on',x===t);
+  });
+  document.getElementById('tenseRef').style.display=
+    (topic==='tense' && mode==='flash') ? 'grid' : 'none';
+  load();
+}
+function load(){
+  if(mode==='flash') loadFlash();
+  else if(mode==='blank') loadBlank();
+  else loadBuild();
+}
+
+// ═══════════════════════════════════════════════════════════
+// FLASHCARD
+// ═══════════════════════════════════════════════════════════
+function loadFlash(){
+  cur=rand(topicMap[topic]); revealed=false;
+  document.getElementById('fclbl').textContent='Kāri · '+topicLabel[topic];
+  document.getElementById('fcq').textContent=cur.q;
+  document.getElementById('fcsub').textContent=cur.sub||'';
+  document.getElementById('fcreo').textContent=cur.reo;
+  document.getElementById('fcnote').textContent=cur.note;
+  document.getElementById('fca').classList.remove('show');
+  document.getElementById('fcrevbtn').disabled=false;
+}
+function fcReveal(){
+  if(revealed) return;
+  document.getElementById('fca').classList.add('show');
+  document.getElementById('fcrevbtn').disabled=true;
+  revealed=true; bump(true);
+}
+function fcNext(){ loadFlash(); }
+
+// ═══════════════════════════════════════════════════════════
+// FILL BLANK
+// ═══════════════════════════════════════════════════════════
+function loadBlank(){
+  cur=rand(topicMap[topic]);
+  document.getElementById('bllbl').textContent='Whakakī · '+topicLabel[topic];
+  // build sentence with input(s)
+  const parts=cur.blank.split('_____');
+  let html='';
+  parts.forEach((p,i)=>{
+    html+=p;
+    if(i<parts.length-1)
+      html+=`<input class="binput" id="bi${i}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="___">`;
+  });
+  document.getElementById('blsent').innerHTML=html;
+  document.getElementById('blen').textContent=cur.ben;
+  const fb=document.getElementById('blfb');
+  fb.className='bfb'; fb.textContent='';
+  document.getElementById('blchkbtn').disabled=false;
+  setTimeout(()=>{const f=document.getElementById('bi0');if(f)f.focus();},60);
+}
+function blCheck(){
+  const answers=(cur.bans||'').split('|');
+  let allOk=true;
+  answers.forEach((ans,i)=>{
+    const inp=document.getElementById('bi'+i);
+    if(!inp)return;
+    const ok=inp.value.trim().toLowerCase()===ans.toLowerCase();
+    inp.classList.remove('ok','ng');
+    inp.classList.add(ok?'ok':'ng');
+    if(!ok){allOk=false; inp.value=ans;}
+  });
+  const fb=document.getElementById('blfb');
+  fb.classList.remove('ok','ng');
+  if(allOk){
+    fb.textContent='✓ Tino tika! Ka rawe!';
+    fb.classList.add('show','ok');
+  } else {
+    fb.innerHTML='✗ Hē — '+cur.bans;
+    fb.classList.add('show','ng');
+  }
+  bump(allOk);
+  document.getElementById('blchkbtn').disabled=true;
+}
+function blNext(){ loadBlank(); }
+
+// ═══════════════════════════════════════════════════════════
+// SENTENCE BUILDER
+// ═══════════════════════════════════════════════════════════
+function loadBuild(){
+  const pool=topicMap[topic].filter(d=>d.build);
+  cur=rand(pool.length?pool:topicMap[topic]);
+  if(!cur.build){setMode('blank');return;}
+  document.getElementById('sblbl').textContent='Hangaia · '+topicLabel[topic];
+  document.getElementById('sbeng').textContent=cur.build.en;
+  sbPlaced=[]; sbOpts=[...cur.build.w].sort(()=>Math.random()-.5);
+  const fb=document.getElementById('sbfb');
+  fb.className='bfb'; fb.textContent='';
+  renderBuild();
+}
+function renderBuild(){
+  const pl=document.getElementById('sbplaced');
+  pl.innerHTML='';
+  sbPlaced.forEach((w,i)=>{
+    const c=document.createElement('span');
+    c.className='wchip placed'; c.textContent=w;
+    c.onclick=()=>sbRemove(i); pl.appendChild(c);
+  });
+  const op=document.getElementById('sbopts');
+  op.innerHTML='';
+  sbOpts.forEach((w,i)=>{
+    const c=document.createElement('span');
+    c.className='wchip'; c.textContent=w;
+    c.onclick=()=>sbPick(i); op.appendChild(c);
+  });
+}
+function sbPick(i){sbPlaced.push(sbOpts.splice(i,1)[0]);renderBuild();}
+function sbRemove(i){sbOpts.push(sbPlaced.splice(i,1)[0]);renderBuild();}
+function sbCheck(){
+  const ans=cur.build.a;
+  const ok=sbPlaced.length===ans.length&&sbPlaced.every((w,i)=>w===ans[i]);
+  const fb=document.getElementById('sbfb');
+  fb.classList.remove('ok','ng');
+  if(ok){
+    fb.textContent='✓ Tino tika! Ka rawe!';
+    fb.classList.add('show','ok');
+  } else {
+    fb.innerHTML='✗ Hē — <b>'+ans.join(' ')+'</b>';
+    fb.classList.add('show','ng');
+  }
+  bump(ok);
+}
+function sbNext(){ loadBuild(); }
+
+// ═══════════════════════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(e.code==='Space'){
+    e.preventDefault();
+    if(mode==='flash') fcReveal();
+    else if(mode==='blank') blCheck();
+    else sbCheck();
+  }
+  if(e.key==='ArrowRight'||e.key==='n'||e.key==='N'){
+    if(mode==='flash') fcNext();
+    else if(mode==='blank') blNext();
+    else sbNext();
+  }
+  if(e.key==='1') setMode('flash');
+  if(e.key==='2') setMode('blank');
+  if(e.key==='3') setMode('build');
+});
+
+// ─── INIT ───
+document.getElementById('tenseRef').style.display='none';
+load();
+</script>
+</body>
+</html>
