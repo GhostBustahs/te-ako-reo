@@ -81,7 +81,7 @@ const data = {
     {q:"He nui _____ māia",sub:"Fill: tōu or tāu? (Your confidence is big)",reo:"tōu māia",note:"Māia (feeling/state) = O-category.",blank:"He nui _____ māia.",ans:"tōu",build:"He nui tōu māia"},
     {q:"He pai _____ wairua",sub:"Fill: tōna or tāna? (His/her spirit is good)",reo:"tōna wairua",note:"Wairua = O-category.",blank:"He pai _____ wairua.",ans:"tōna",build:"He pai tōna wairua"},
     {q:"Kua tae mai _____ mātua",sub:"Fill: ōku or āku? (My parents arrived)",reo:"ōku mātua",note:"Mātua = O-category.",blank:"Kua tae mai _____ mātua.",ans:"ōku",build:"Kua tae mai ōku mātua"},
-    {q:"Kei te moe _____ pēpi",sub:"Fill: tōku or tāku? (My baby is sleeping)",reo:"tōku pēpi",note:"Pēpi = O-category (relationship).",blank:"Kei te moe _____ pēpi.",ans:"tōku",build:"Kei te moe tōku pēpi"},
+    {q:"Kei te moe _____ pēpi",sub:"Fill: tōku or tāku? (My baby is sleeping)",reo:"tōku pēpi",note:"Pēpi = O-category (closest kin). Compare: tamaiti = A (child you care for).",blank:"Kei te moe _____ pēpi.",ans:"tōku",build:"Kei te moe tōku pēpi"},
     {q:"He pai _____ kāinga",sub:"Fill: tō mātou (Our home is good)",reo:"tō mātou kāinga",note:"Kāinga = O-category.",blank:"He pai _____ kāinga.",ans:"tō mātou",build:"He pai tō mātou kāinga"},
     {q:"Kei te noho au i _____ whare",sub:"Fill: tōku or tāku? (I live in my house)",reo:"tōku whare",note:"Whare you live in = O-category.",blank:"Kei te noho au i _____ whare.",ans:"tōku",build:"Kei te noho au i tōku whare"},
     {q:"He nui _____ ingoa",sub:"Fill: tōna or tāna? (His/her name is important)",reo:"tōna ingoa",note:"Ingoa = O-category.",blank:"He nui _____ ingoa.",ans:"tōna",build:"He nui tōna ingoa"},
@@ -103,10 +103,10 @@ const data = {
     {q:"He paru _____ ringa",sub:"Fill: ōku or āku? (My hands are dirty)",reo:"ōku ringa",note:"Body part = O-category.",blank:"He paru _____ ringa.",ans:"ōku",build:"He paru ōku ringa"},
     {q:"Kei te haere _____ hoa",sub:"Fill: ōku or āku? (My friends are going)",reo:"ōku hoa",note:"Friends (relationships) = O-category.",blank:"Kei te haere _____ hoa.",ans:"ōku",build:"Kei te haere ōku hoa"},
     {q:"Kei te rapu au i _____ kī",sub:"Fill: āku (I’m searching for my keys)",reo:"āku kī",note:"Keys/tools = A-category.",blank:"Kei te rapu au i _____ kī.",ans:"āku",build:"Kei te rapu au i āku kī"},
-    {q:"He pai _____ whakaaro",sub:"Fill: ōku or āku? (My thoughts are good)",reo:"ōku whakaaro",note:"Thoughts = O-category.",blank:"He pai _____ whakaaro.",ans:"ōku",build:"He pai ōku whakaaro"},
-    {q:"He nui _____ mahi",sub:"Fill: ā mātou (We (not you) have lots of work)",reo:"ā mātou mahi",note:"Tasks = A-category.",blank:"He nui _____ mahi.",ans:"ā mātou",build:"He nui ā mātou mahi"},
-    {q:"He nui _____ whānau",sub:"Fill: ō rātou (Their families are big)",reo:"ō rātou whānau",note:"Whānau = O-category.",blank:"He nui _____ whānau.",ans:"ō rātou",build:"He nui ō rātou whānau"},
-    {q:"Kua tae mai _____ mātua",sub:"Fill: ō rātou (Their parents arrived)",reo:"ō rātou mātua",note:"Mātua = O-category.",blank:"Kua tae mai _____ mātua.",ans:"ō rātou",build:"Kua tae mai ō rātou mātua"},
+    {q:"He pai _____ whakaaro katoa",sub:"Fill: ōku or āku? (My thoughts are good)",reo:"ōku whakaaro",note:"Thoughts = O-category.",blank:"He pai _____ whakaaro.",ans:"ōku",build:"He pai ōku whakaaro"},
+    {q:"He nui _____ mahi (mātou)",sub:"Fill: ā mātou (We (not you) have lots of work)",reo:"ā mātou mahi",note:"Tasks = A-category.",blank:"He nui _____ mahi.",ans:"ā mātou",build:"He nui ā mātou mahi"},
+    {q:"He nui _____ whānau (rātou)",sub:"Fill: ō rātou (Their families are big)",reo:"ō rātou whānau",note:"Whānau = O-category.",blank:"He nui _____ whānau.",ans:"ō rātou",build:"He nui ō rātou whānau"},
+    {q:"Kua tae mai _____ mātua (rātou)",sub:"Fill: ō rātou (Their parents arrived)",reo:"ō rātou mātua",note:"Mātua = O-category.",blank:"Kua tae mai _____ mātua.",ans:"ō rātou",build:"Kua tae mai ō rātou mātua"},
     {q:"Kei te tunu rātou i _____ kai",sub:"Fill: tā rātou (They are cooking their food)",reo:"tā rātou kai",note:"Prepared food = A-category.",blank:"Kei te tunu rātou i _____ kai.",ans:"tā rātou",build:"Kei te tunu rātou i tā rātou kai"},
     {q:"Kei te noho rātou i _____ kāinga",sub:"Fill: tō rātou (They live at their home)",reo:"tō rātou kāinga",note:"Home = O-category.",blank:"Kei te noho rātou i _____ kāinga.",ans:"tō rātou",build:"Kei te noho rātou i tō rātou kāinga"},
 
@@ -193,7 +193,7 @@ const data = {
     {q:"Kāore he raihi i roto i te kāpata",sub:"Fill: kāpata (There is no rice in the cupboard)",reo:"kāpata",note:"Kāore he = there is no.",blank:"Kāore he raihi i roto i te _____.",ans:"kāpata",build:"Kāore he raihi i roto i te kāpata"},
     {q:"Kāore anō te wai kia hū",sub:"Fill: hū (The water hasn't boiled yet)",reo:"hū",note:"Kāore anō ... kia = not yet.",blank:"Kāore anō te wai kia _____.",ans:"hū",build:"Kāore anō te wai kia hū"},
     {q:"Me kai ahau i ōku pire",sub:"Fill: ōku (I must take my pills)",reo:"ōku",note:"Me = must/should.",blank:"Me kai ahau i _____ pire.",ans:"ōku",build:"Me kai ahau i ōku pire"},
-    {q:"Kia tere, kei mākū koe",sub:"Fill: koe (Hurry or you'll get wet)",reo:"koe",note:"Kei = warning (lest).",blank:"Kia tere, kei mākū _____.",ans:"koe",build:"Kia tere kei mākū koe"},
+    {q:"Kia tere, kei mākū koe",sub:"Fill: koe (Hurry or you'll get wet)",reo:"koe",note:"Kei = warning (lest).",blank:"Kia tere, kei mākū _____.",ans:"koe",build:"Kia tere, kei mākū koe"},
 
     // Straightforward build/fill practice (graded)
     {q:"_____ kai rātou i te tina",sub:"Which marker? (present)",reo:"Kei te",note:"Kei te = happening now.",blank:"_____ kai rātou i te tina.",ans:"Kei te",build:"Kei te kai rātou i te tina"},
