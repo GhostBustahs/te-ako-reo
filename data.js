@@ -118,7 +118,7 @@ const data = {
     {q:"He reka _____ parakuihi",sub:"Fill: tā mātou (Our breakfast is tasty)",reo:"tā mātou parakuihi",note:"Food prepared = A-category.",blank:"He reka _____ parakuihi.",ans:"tā mātou",build:"He reka tā mātou parakuihi"},
     {q:"He pai _____ hoa",sub:"Fill: ōu (Your friends are nice)",reo:"ōu hoa",note:"Friends = O-category (relationships).",blank:"He pai _____ hoa.",ans:"ōu",build:"He pai ōu hoa"},
     {q:"Kei te whāngai au i _____ ngeru",sub:"Fill: tāku (I’m feeding my cat)",reo:"tāku ngeru",note:"Pet = A-category.",blank:"Kei te whāngai au i _____ ngeru.",ans:"tāku",build:"Kei te whāngai au i tāku ngeru"},
-    {q:"Kei te moe _____ ngeru",sub:"Fill: tōku (My cat is asleep)",reo:"tōku ngeru",note:"If treated as relationship/pet-at-home, keep O here? We keep pets as A in this dataset—so use next item instead.",blank:"Kei te moe _____ ngeru.",ans:"tōku",build:"Kei te moe tōku ngeru"},
+    {q:"Kei te moe _____ ngeru",sub:"Fill: tāku or tōku? (My cat is asleep)",reo:"tāku ngeru",note:"Ngeru = A-category (pet you care for). Consistent with dataset.",blank:"Kei te moe _____ ngeru.",ans:"tāku",build:"Kei te moe tāku ngeru"},
     {q:"Kua haere au ki _____ mahi",sub:"Fill: taku (I went to my job)",reo:"taku mahi",note:"Mahi (job/work) treated as A-category.",blank:"Kua haere au ki _____ mahi.",ans:"taku",build:"Kua haere au ki taku mahi"},
     {q:"He nui _____ manawa",sub:"Fill: tōku (My heart/courage is big)",reo:"tōku manawa",note:"Manawa (inner state) = O-category.",blank:"He nui _____ manawa.",ans:"tōku",build:"He nui tōku manawa"}
   ],
@@ -153,7 +153,7 @@ const data = {
 
     // More to reach 60 (short, predictable)
     {q:"Ka waiata _____ āpōpō.",sub:"Build: I will sing tomorrow",reo:"au",note:"Au = I.",blank:"Ka waiata _____ āpōpō.",ans:"au",build:"Ka waiata au āpōpō"},
-    {q:"Kua mutu _____ mahi.",sub:"Build: You finished your work",reo:"koe",note:"Koe = you.",blank:"Kua mutu _____ mahi.",ans:"koe",build:"Kua mutu koe mahi"},
+    {q:"Kua tae _____ ki te mahi.",sub:"Build: You have arrived at work",reo:"koe",note:"Koe = you.",blank:"Kua tae _____ ki te mahi.",ans:"koe",build:"Kua tae koe ki te mahi"},
     {q:"E moe ana _____ i te pō.",sub:"Build: He/she is sleeping at night",reo:"ia",note:"Ia = he/she.",blank:"E moe ana _____ i te pō.",ans:"ia",build:"E moe ana ia i te pō"},
     {q:"Ka kai _____ i te tina.",sub:"Build: We two will eat lunch",reo:"tāua",note:"Tāua = us two.",blank:"Ka kai _____ i te tina.",ans:"tāua",build:"Ka kai tāua i te tina"},
     {q:"I noho _____ i te marae.",sub:"Build: We two (not you) stayed at the marae",reo:"māua",note:"Māua = exclusive dual.",blank:"I noho _____ i te marae.",ans:"māua",build:"I noho māua i te marae"},
@@ -256,11 +256,11 @@ const data = {
   mix: [] // Auto-filled below (pattern unchanged)
 };
 
-// Auto-fill mix with samples from all topics (UNCHANGED slicing pattern)
+// Auto-fill mix with samples from all topics (with safety checks)
 data.mix = [
-  ...data.ao.slice(0, 20),
-  ...data.kupu.slice(0, 13),
-  ...data.tense.slice(0, 22)
+  ...(data.ao || []).slice(0, 20),
+  ...(data.kupu || []).slice(0, 13),
+  ...(data.tense || []).slice(0, 22)
 ];
 
 console.log("✅ Data loaded:", {
