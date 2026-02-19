@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="mi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ako Reo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="logo">Ako Reo</div>
+    <div class="xp">
+      <span class="fire" id="fire">🔥</span>
+      <div>
+        <div class="xp-label">XP</div>
+        <div class="xp-val" id="xp">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS RING -->
+  <div class="prog">
+    <svg width="100" height="100">
+      <circle class="bg" cx="50" cy="50" r="42"></circle>
+      <circle class="fill" id="ring" cx="50" cy="50" r="42" 
+        stroke-dasharray="264" stroke-dashoffset="264"></circle>
+    </svg>
+    <div class="prog-text">
+      <span class="prog-num" id="lvl">1</span>
+      <span>Level</span>
+    </div>
+  </div>
+
+  <!-- MODE TABS -->
+  <div class="tabs">
+    <button class="tab on" id="t-flash" onclick="setMode('flash')">Kāri</button>
+    <button class="tab" id="t-blank" onclick="setMode('blank')">Whakakī</button>
+    <button class="tab" id="t-build" onclick="setMode('build')">Hangaia</button>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="topics">
+    <button class="tpc on" id="tp-ao" onclick="setTopic('ao')">A/O</button>
+    <button class="tpc" id="tp-kupu" onclick="setTopic('kupu')">Tūpou</button>
+    <button class="tpc" id="tp-tense" onclick="setTopic('tense')">Rerenga</button>
+    <button class="tpc" id="tp-mix" onclick="setTopic('mix')">Katoa</button>
+  </div>
+
+  <!-- FLASHCARD PANEL -->
+  <div id="p-flash" class="card">
+    <div class="clbl" id="lbl">Kāri · A/O Pūriro</div>
+    <div class="q" id="fcq">—</div>
+    <div class="qsub" id="fcsub"></div>
+    <div class="ans" id="fca">
+      <div class="ans-reo" id="fcreo"></div>
+      <div class="ans-note" id="fcnote"></div>
+    </div>
+    <button class="btn" id="fcbtn" onclick="fcAction()">Huri · Reveal</button>
+  </div>
+
+  <!-- FILL BLANK PANEL -->
+  <div id="p-blank" class="card" style="display:none">
+    <div class="clbl">Whakakī · Fill Blank</div>
+    <div class="q" id="blq" style="font-size:20px;min-height:60px;"></div>
+    <input class="inp" id="blinp" placeholder="Tuhia te whakautu..." autocomplete="off">
+    <div class="fb" id="blfb"></div>
+    <button class="btn" id="blbtn" onclick="blCheck()">Tika?</button>
+  </div>
+
+  <!-- BUILD PANEL -->
+  <div id="p-build" class="card" style="display:none">
+    <div class="clbl">Hangaia · Build Sentence</div>
+    <div class="q" id="bdq" style="font-size:18px;min-height:50px;"></div>
+    <div class="bhint">Tap words in order · Tap placed word to remove</div>
+    <div class="bzone" id="bdzone"></div>
+    <div class="bopt" id="bdopt"></div>
+    <div class="fb" id="bdfb"></div>
+    <button class="btn" onclick="bdCheck()">Tika?</button>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="logic.js"></script>
+</body>
+</html>
